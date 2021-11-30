@@ -28,14 +28,12 @@ class UsuariosController extends Controller
             $usuario->email = $datos->email;
 
         try{
-
             if(Usuario::where('email', '=', $datos->email)->first()){
                 $respuesta['msg'] = "El email utilizado ya existe";
             }else{
                 $usuario->save();
                 $respuesta['msg'] = "Usuario guardado con id ".$usuario->id;
             }
-
         }catch(\Exception $e){
             $respuesta['status'] = 0;
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
@@ -57,7 +55,7 @@ class UsuariosController extends Controller
                 $usuario->save();
                 $respuesta['msg'] = "Usuario desactivado";
             }else if($usuario->activo == 0){
-                $respuesta["msg"] = "Usuario se encuentra desactivado";
+                $respuesta["msg"] = "Usuario está desactivado";
             }else{
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -92,8 +90,8 @@ class UsuariosController extends Controller
                 if(isset($datos->contraseña))
                     $usuario->contraseña = $datos->contraseña;
 
-                $usuario->save();
-                $respuesta['msg'] = "Usuario actualizado.";
+                    $usuario->save();
+                    $respuesta['msg'] = "Usuario actualizado.";
             }else{
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -113,11 +111,9 @@ class UsuariosController extends Controller
         $curso = Curso::find($cursos_id);
 
         try{
-            $usuario = Usuario::all();
-            $respuesta['datos'] = $usuario;
             if ($usuario && $curso){
                 $usuario->curso()->attach($curso);
-                $respuesta['msg'] = "Este usuario ha adquirido el curso con id ".$curso->id;
+                $respuesta['msg'] = "Usuario ha adquirido el curso con id ".$curso->id;
             }else {
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -128,19 +124,6 @@ class UsuariosController extends Controller
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
         }
 
-        return response()->json($respuesta);
-    }
-    
-    public function listar(){
-
-        $respuesta = ["status" => 1, "msg" => ""];
-        try{
-            $usuario = Usuario::all();
-            $respuesta['datos'] = $usuario;
-        }catch(\Exception $e){
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
-        }
         return response()->json($respuesta);
     }
 
@@ -157,5 +140,18 @@ class UsuariosController extends Controller
         }
         return response()->json($respuesta);
     }
-}
 
+    public function listar(){
+
+        $respuesta = ["status" => 1, "msg" => ""];
+        try{
+            $usuario = Usuario::all();
+            $respuesta['datos'] = $usuario;
+        }catch(\Exception $e){
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+        }
+        return response()->json($respuesta);
+    }
+
+}
