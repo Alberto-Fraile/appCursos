@@ -14,7 +14,6 @@ class CursosController extends Controller
 
         $datos = $req->getContent();
 
-
         $datos = json_decode($datos);
 
         $curso = new Curso();
