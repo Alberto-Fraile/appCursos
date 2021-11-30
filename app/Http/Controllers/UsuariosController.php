@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuario;
+use App\Models\Curso;
 
 class UsuariosController extends Controller
 {
@@ -60,7 +61,7 @@ class UsuariosController extends Controller
             $respuesta['status'] = 0;
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
         }
-        
+
         return response()->json($respuesta);
     }
 
@@ -85,8 +86,8 @@ class UsuariosController extends Controller
                 if(isset($datos->contraseña))
                     $usuario->contraseña = $datos->contraseña;
 
-                    $usuario->save();
-                    $respuesta['msg'] = "Usuario actualizado.";
+                $usuario->save();
+                $respuesta['msg'] = "Usuario actualizado.";
             }else{
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -99,6 +100,31 @@ class UsuariosController extends Controller
         return response()->json($respuesta);
     }
 
+    public function adquirir_cursos($usuarios_id, $cursos_id){
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        $usuario = Usuario::find($usuarios_id);
+        $curso = Curso::find($cursos_id);
+
+        try{
+            $usuario = Usuario::all();
+            $respuesta['datos'] = $usuario;
+            if ($usuario && $curso){
+                $usuario->curso()->attach($curso);
+                $respuesta['msg'] = "El usuario ".$usuario->id "ha adquirido el curso con id ".$curso->id;
+            }else {
+                $respuesta["msg"] = "Usuario no encontrado";
+                $respuesta["status"] = 0;
+            }
+
+        }catch(\Exception $e){
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+        }
+
+        return response()->json($respuesta);
+    }
+    
     public function listar(){
 
         $respuesta = ["status" => 1, "msg" => ""];
@@ -117,7 +143,7 @@ class UsuariosController extends Controller
 
         try{
             $usuario = Usuario::find($id);
-            $usuario->makeVisible(['direccion','updated_at']);
+            $usuario->makeVisible(['nombre','foto', 'updated_at']);
             $respuesta['datos'] = $usuario;
         }catch(\Exception $e){
             $respuesta['status'] = 0;
