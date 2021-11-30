@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('usuario')->group(function(){
+    Route::put('/crear',[UsuariosController::class,'crear']);
+    Route::post('/desactivar/{id}',[UsuariosController::class,'desactivar']);
+    Route::post('/editar/{id}',[UsuariosController::class,'editar']);
+    Route::get('/listar',[UsuariosController::class,'listar']);
+    Route::get('/ver/{id}',[UsuariosController::class,'ver']);
+});
+
+
+Route::prefix('curso')->group(function(){
+    Route::put('/crear',[CursosController::class,'crear']);
+    Route::get('/listar',[CursosController::class,'listar']);
+});
+
+Route::prefix('video')->group(function(){
+    Route::put('/crear',[VideosController::class,'crear']);
 });
