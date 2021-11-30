@@ -40,7 +40,7 @@ class VideosController extends Controller
 
         try{
             $videos = Video::find($id);
-            $videos->makeVisible(['direccion','updated_at']);
+            $videos->makeVisible(['enlace','updated_at']);
             $respuesta['datos'] = $videos;
         }catch(\Exception $e){
             $respuesta['status'] = 0;

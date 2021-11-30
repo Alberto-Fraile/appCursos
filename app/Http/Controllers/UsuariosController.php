@@ -28,8 +28,14 @@ class UsuariosController extends Controller
             $usuario->email = $datos->email;
 
         try{
-            $usuario->save();
-            $respuesta['msg'] = "Usuario guardado con id ".$usuario->id;
+
+            if(Usuario::where('email', '=', $datos->email)->first()){
+                $respuesta['msg'] = "El email utilizado ya existe";
+            }else{
+                $usuario->save();
+                $respuesta['msg'] = "Usuario guardado con id ".$usuario->id;
+            }
+
         }catch(\Exception $e){
             $respuesta['status'] = 0;
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
@@ -51,7 +57,7 @@ class UsuariosController extends Controller
                 $usuario->save();
                 $respuesta['msg'] = "Usuario desactivado";
             }else if($usuario->activo == 0){
-                $respuesta["msg"] = "Usuario está desactivado";
+                $respuesta["msg"] = "Usuario se encuentra desactivado";
             }else{
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -111,7 +117,7 @@ class UsuariosController extends Controller
             $respuesta['datos'] = $usuario;
             if ($usuario && $curso){
                 $usuario->curso()->attach($curso);
-                $respuesta['msg'] = "El usuario ".$usuario->id "ha adquirido el curso con id ".$curso->id;
+                $respuesta['msg'] = "Este usuario ha adquirido el curso con id ".$curso->id;
             }else {
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -138,18 +144,17 @@ class UsuariosController extends Controller
         return response()->json($respuesta);
     }
 
-    public function ver($id){
-        $respuesta = ["status" => 1, "msg" => ""];
+    public function listarCursosAdquiridos($id){
 
+        $respuesta = ["status" => 1, "msg" => ""];
         try{
             $usuario = Usuario::find($id);
-            $usuario->makeVisible(['nombre','foto', 'updated_at']);
+            $usuario->curso;
             $respuesta['datos'] = $usuario;
         }catch(\Exception $e){
             $respuesta['status'] = 0;
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
         }
-
         return response()->json($respuesta);
     }
 }
