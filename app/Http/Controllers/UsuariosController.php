@@ -60,7 +60,7 @@ class UsuariosController extends Controller
             $respuesta['status'] = 0;
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
         }
-
+        
         return response()->json($respuesta);
     }
 
@@ -77,7 +77,6 @@ class UsuariosController extends Controller
             $usuario = Usuario::find($id);
 
             if($usuario){
-
 
                 if(isset($datos->nombre))
                     $usuario->nombre = $datos->nombre;
