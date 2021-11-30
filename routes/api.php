@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\CursosController;
+use App\Http\Controllers\VideosController;
 
 /*
 |--------------------------------------------------------------------------
